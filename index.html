@@ -111,7 +111,38 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
     `;
 
     // Create a downloadable Word document
-    const blob = new Blob(['\ufeff', cvContent], { type: 'application/msword' });
+    // Create a downloadable Word document using a template
+const createWordDocument = (cvContent) => {
+    // Define the template structure
+    const template = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body { font-family: Arial, sans-serif; }
+            h1, h2 { color: #333; }
+            p { margin: 0; }
+        </style>
+    </head>
+    <body>
+        <h1>${cvContent.name}</h1>
+        <p>Email: ${cvContent.email}</p>
+        <p>Phone: ${cvContent.phone}</p>
+        <p>LinkedIn: ${cvContent.linkedin}</p>
+        <h2>Education</h2>
+        <p>${cvContent.education}</p>
+        <h2>Experience</h2>
+        <p>${cvContent.experience}</p>
+        <h2>Skills</h2>
+        <p>${cvContent.skills}</p>
+        <h2>Interests</h2>
+        <p>${cvContent.interests}</p>
+    </body>
+    </html>
+    `;
+
+    const blob = new Blob(['\ufeff', template], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -120,6 +151,24 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+};
+
+// Usage example within the submit event listener
+document.getElementById('cvForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const cvContent = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        linkedin: document.getElementById('linkedin').value,
+        education: document.getElementById('education').value,
+        experience: document.getElementById('experience').value,
+        skills: document.getElementById('skills').value,
+        interests: document.getElementById('interests').value
+    };
+
+    createWordDocument(cvContent);
 });
 
 // Load data from local storage if available
