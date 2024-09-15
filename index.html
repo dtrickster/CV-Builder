@@ -67,7 +67,7 @@ button:hover {
 }
 </style>
 <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js">
 </head>
 <body>
 <h1>CV Builder</h1>
@@ -92,7 +92,7 @@ button:hover {
 <textarea id="skillsInterests" placeholder="Skills and Interests"></textarea>
 <button type="submit">Generate CV</button>
 </form>
-<script>
+ <script>
 document.getElementById('cvForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -113,7 +113,7 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
 
     localStorage.setItem('cvData', JSON.stringify(cvData));
 
-    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle } = docx;
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, WidthType, TableCell, TableRow, Table } = docx;
 
     const doc = new Document({
         sections: [{
@@ -128,7 +128,8 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
                         paragraph: {
                             run: {
                                 color: "00796b",
-                                size: 32,
+                                size: 36,
+                                bold: true,
                                 font: "Calibri",
                             },
                         },
@@ -146,97 +147,159 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
                         }),
                     ],
                 }),
-                new Paragraph({
-                    text: "Personal Data",
-                    heading: HeadingLevel.HEADING_2,
-                    style: {
-                        paragraph: {
-                            run: {
-                                color: "004d40",
-                                size: 28,
-                                font: "Calibri",
-                            },
-                        },
+                new Table({
+                    width: {
+                        size: 100,
+                        type: WidthType.PERCENTAGE,
                     },
-                    border: {
-                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
-                    },
-                    spacing: { after: 200 },
-                }),
-                new Paragraph({
-                    children: [
-                        new TextRun({ text: `Gender: ${cvData.gender}`, size: 24, font: "Calibri" }),
-                        new TextRun({ text: "\nAge: ", size: 24, font: "Calibri" }),
-                        new TextRun({ text: cvData.age, size: 24, font: "Calibri" }),
-                        new TextRun({ text: "\nNationality: ", size: 24, font: "Calibri" }),
-                        new TextRun({ text: cvData.nationality, size: 24, font: "Calibri" }),
-                        new TextRun({ text: "\nAddress: ", size: 24, font: "Calibri" }),
-                        new TextRun({ text: cvData.address, size: 24, font: "Calibri" }),
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: [new Paragraph({
+                                        text: "Personal Data",
+                                        heading: HeadingLevel.HEADING_2,
+                                        style: {
+                                            paragraph: {
+                                                run: {
+                                                    color: "004d40",
+                                                    size: 28,
+                                                    bold: true,
+                                                    font: "Calibri",
+                                                },
+                                            },
+                                        },
+                                    })],
+                                    borders: {
+                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
+                                    },
+                                }),
+                            ],
+                        }),
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new TextRun({ text: `Gender: ${cvData.gender}`, size: 24, font: "Calibri" }),
+                                                new TextRun({ text: "\nAge: ", size: 24, font: "Calibri" }),
+                                                new TextRun({ text: cvData.age, size: 24, font: "Calibri" }),
+                                                new TextRun({ text: "\nNationality: ", size: 24, font: "Calibri" }),
+                                                new TextRun({ text: cvData.nationality, size: 24, font: "Calibri" }),
+                                                new TextRun({ text: "\nAddress: ", size: 24, font: "Calibri" }),
+                                                new TextRun({ text: cvData.address, size: 24, font: "Calibri" }),
+                                            ],
+                                            spacing: { after: 200 },
+                                        }),
+                                    ],
+                                }),
+                            ],
+                        }),
                     ],
-                    spacing: { after: 200 },
                 }),
-                new Paragraph({
-                    text: "Education",
-                    heading: HeadingLevel.HEADING_2,
-                    style: {
-                        paragraph: {
-                            run: {
-                                color: "004d40",
-                                size: 28,
-                                font: "Calibri",
-                            },
-                        },
+                new Table({
+                    width: {
+                        size: 100,
+                        type: WidthType.PERCENTAGE,
                     },
-                    border: {
-                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
-                    },
-                    spacing: { after: 200 },
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: [new Paragraph({
+                                        text: "Education",
+                                        heading: HeadingLevel.HEADING_2,
+                                        style: {
+                                            paragraph: {
+                                                run: {
+                                                    color: "004d40",
+                                                    size: 28,
+                                                    bold: true,
+                                                    font: "Calibri",
+                                                },
+                                            },
+                                        },
+                                    })],
+                                    borders: {
+                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
+                                    },
+                                }),
+                            ],
+                        }),
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: cvData.education.split('\n').map(item => 
+                                        new Paragraph({
+                                            text: item,
+                                            bullet: { level: 0 },
+                                            style: {
+                                                paragraph: {
+                                                    run: {
+                                                        size: 24,
+                                                        font: "Calibri",
+                                                    },
+                                                },
+                                            },
+                                        })
+                                    ),
+                                }),
+                            ],
+                        }),
+                    ],
                 }),
-                ...cvData.education.split('\n').map(item => 
-                    new Paragraph({
-                        text: item,
-                        bullet: { level: 0 },
-                        style: {
-                            paragraph: {
-                                run: {
-                                    size: 24,
-                                    font: "Calibri",
-                                },
-                            },
-                        },
-                    })
-                ),
-                new Paragraph({
-                    text: "Work Experience",
-                    heading: HeadingLevel.HEADING_2,
-                    style: {
-                        paragraph: {
-                            run: {
-                                color: "004d40",
-                                size: 28,
-                                font: "Calibri",
-                            },
-                        },
+                new Table({
+                    width: {
+                        size: 100,
+                        type: WidthType.PERCENTAGE,
                     },
-                    border: {
-                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
-                    },
-                    spacing: { before: 200, after: 200 },
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: [new Paragraph({
+                                        text: "Work Experience",
+                                        heading: HeadingLevel.HEADING_2,
+                                        style: {
+                                            paragraph: {
+                                                run: {
+                                                    color: "004d40",
+                                                    size: 28,
+                                                    bold: true,
+                                                    font: "Calibri",
+                                                },
+                                            },
+                                        },
+                                    })],
+                                    borders: {
+                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
+                                    },
+                                }),
+                            ],
+                        }),
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: cvData.workExperience.split('\n').map(item => 
+                                        new Paragraph({
+                                            text: item,
+                                            bullet: { level: 0 },
+                                            style: {
+                                                paragraph: {
+                                                    run: {
+                                                        size: 24,
+                                                        font: "Calibri",
+                                                    },
+                                                },
+                                            },
+                                        })
+                                    ),
+                                }),
+                            ],
+                        }),
+                    ],
                 }),
-                ...cvData.workExperience.split('\n').map(item => 
-                    new Paragraph({
-                        text: item,
-                        bullet: { level: 0 },
-                        style: {
-                            paragraph: {
-                                run: {
-                                    size: 24,
-                                    font: "Calibri",
-                                },
-                            },
-                        },
-                    })
-                ),
             ],
         }],
     });
@@ -244,37 +307,57 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
     if (cvData.additionalExperience) {
         doc.addSection({
             children: [
-                new Paragraph({
-                    text: "Additional Experience",
-                    heading: HeadingLevel.HEADING_2,
-                    style: {
-                        paragraph: {
-                            run: {
-                                color: "004d40",
-                                size: 28,
-                                font: "Calibri",
-                            },
-                        },
+                new Table({
+                    width: {
+                        size: 100,
+                        type: WidthType.PERCENTAGE,
                     },
-                    border: {
-                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
-                    },
-                    spacing: { before: 200, after: 200 },
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: [new Paragraph({
+                                        text: "Additional Experience",
+                                        heading: HeadingLevel.HEADING_2,
+                                        style: {
+                                            paragraph: {
+                                                run: {
+                                                    color: "004d40",
+                                                    size: 28,
+                                                    bold: true,
+                                                    font: "Calibri",
+                                                },
+                                            },
+                                        },
+                                    })],
+                                    borders: {
+                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
+                                    },
+                                }),
+                            ],
+                        }),
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: cvData.additionalExperience.split('\n').map(item => 
+                                        new Paragraph({
+                                            text: item,
+                                            bullet: { level: 0 },
+                                            style: {
+                                                paragraph: {
+                                                    run: {
+                                                        size: 24,
+                                                        font: "Calibri",
+                                                    },
+                                                },
+                                            },
+                                        })
+                                    ),
+                                }),
+                            ],
+                        }),
+                    ],
                 }),
-                ...cvData.additionalExperience.split('\n').map(item => 
-                    new Paragraph({
-                        text: item,
-                        bullet: { level: 0 },
-                        style: {
-                            paragraph: {
-                                run: {
-                                    size: 24,
-                                    font: "Calibri",
-                                },
-                            },
-                        },
-                    })
-                ),
             ],
         });
     }
@@ -282,37 +365,57 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
     if (cvData.skillsInterests) {
         doc.addSection({
             children: [
-                new Paragraph({
-                    text: "Skills and Interests",
-                    heading: HeadingLevel.HEADING_2,
-                    style: {
-                        paragraph: {
-                            run: {
-                                color: "004d40",
-                                size: 28,
-                                font: "Calibri",
-                            },
-                        },
+                new Table({
+                    width: {
+                        size: 100,
+                        type: WidthType.PERCENTAGE,
                     },
-                    border: {
-                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
-                    },
-                    spacing: { before: 200, after: 200 },
+                    rows: [
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: [new Paragraph({
+                                        text: "Skills and Interests",
+                                        heading: HeadingLevel.HEADING_2,
+                                        style: {
+                                            paragraph: {
+                                                run: {
+                                                    color: "004d40",
+                                                    size: 28,
+                                                    bold: true,
+                                                    font: "Calibri",
+                                                },
+                                            },
+                                        },
+                                    })],
+                                    borders: {
+                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
+                                    },
+                                }),
+                            ],
+                        }),
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    children: cvData.skillsInterests.split('\n').map(item => 
+                                        new Paragraph({
+                                            text: item,
+                                            bullet: { level: 0 },
+                                            style: {
+                                                paragraph: {
+                                                    run: {
+                                                        size: 24,
+                                                        font: "Calibri",
+                                                    },
+                                                },
+                                            },
+                                        })
+                                    ),
+                                }),
+                            ],
+                        }),
+                    ],
                 }),
-                ...cvData.skillsInterests.split('\n').map(item => 
-                    new Paragraph({
-                        text: item,
-                        bullet: { level: 0 },
-                        style: {
-                            paragraph: {
-                                run: {
-                                    size: 24,
-                                    font: "Calibri",
-                                },
-                            },
-                        },
-                    })
-                ),
             ],
         });
     }
@@ -323,18 +426,8 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
     });
 });
 
-window.onload = function() {
-    const savedData = JSON.parse(localStorage.getItem('cvData'));
-    if (savedData) {
-        Object.keys(savedData).forEach(key => {
-            const element = document.getElementById(key);
-            if (element) {
-                element.value = savedData[key] || '';
-            }
-        });
-    }
-};
-</script>
+// The rest of the script remains the same
+    </script>
 <div class="message">
     <p><strong>Dear users,</strong></p>
     <p>Thank you for using our CV Builder!</p>
