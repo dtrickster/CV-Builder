@@ -1,5 +1,3 @@
-To fix the CV builder app to download CVs in the requested templates only, you need to update the CSS to include the styles for the requested templates and update the JavaScript to generate the CV content based on the selected template. Here's the updated code:
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,64 +41,6 @@ To fix the CV builder app to download CVs in the requested templates only, you n
         button:hover {
             background-color: #218838;
         }
-        
-        /* American CV Style */
-        .american .name {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .american .address {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .american .phone {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .american .email {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .american .linkedin {
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        .american .section {
-            margin-bottom: 10px;
-        }
-        .american .subsection {
-            margin-left: 20px;
-        }
-        
-        /* British CV Style */
-        .british .name {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .british .address {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .british .phone {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        .british .email {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        .british .linkedin {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .british .section {
-            margin-bottom: 10px;
-        }
-        .british .subsection {
-            margin-left: 30px;
-        }
     </style>
 </head>
 <body>
@@ -108,43 +48,29 @@ To fix the CV builder app to download CVs in the requested templates only, you n
 <h1>CV Builder</h1>
 <form id="cvForm">
     <h2>Personal Information</h2>
-    <div class="american">
-        <div class="name">[Full Name]</div>
-        <div class="address">[Home Address]</div>
-        <div class="phone">[Phone Number]</div>
-        <div class="email">[Email]</div>
-        <div class="linkedin">[LinkedIn Account]</div>
-    </div>
-    <div class="british">
-        <div class="name">[Full Name]</div>
-        <div class="address">[Address]</div>
-        <div class="phone">[Tel:</div>
-        <div class="email">[Email:</div>
-        <div class="linkedin">[LinkedIn:](www.linkedin.com/in/[username])</div>
-    </div>
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="text" id="email" placeholder="Email" required>
+    <input type="text" id="phone" placeholder="Phone Number" required>
+    <input type="text" id="linkedin" placeholder="LinkedIn Account">
+
     <h2>Personal Data</h2>
-    <input type="text" id="gender" placeholder="Gender" required>
-    <input type="text" id="age" placeholder="Age" required>
-    <input type="text" id="nationality" placeholder="Nationality" required>
+    <input type="text" id="gender" placeholder="Gender">
+    <input type="text" id="age" placeholder="Age">
+    <input type="text" id="nationality" placeholder="Nationality">
+    <input type="text" id="address" placeholder="Home Address">
 
     <h2>Education</h2>
-    <textarea id="education" placeholder="Degree, Institution, Dates, Grade, Modules" required></textarea>
+    <textarea id="education" placeholder="Education" required></textarea>
 
     <h2>Work Experience</h2>
-    <textarea id="workExperience" placeholder="Job Title, Company, Dates, Responsibilities" required></textarea>
+    <textarea id="workExperience" placeholder="Work Experience" required></textarea>
 
     <h2>Additional Experience</h2>
-    <textarea id="additionalExperience" placeholder="Roles, Organizations, Dates, Responsibilities"></textarea>
+    <textarea id="additionalExperience" placeholder="Additional Experience"></textarea>
 
     <h2>Skills and Interests</h2>
-    <textarea id="skills" placeholder="Skills, Languages, Interests" required></textarea>
+    <textarea id="skillsInterests" placeholder="Skills and Interests"></textarea>
 
-    <h2>CV Format</h2>
-    <select id="cvFormat">
-        <option value="american">American CV</option>
-        <option value="british">British CV</option>
-    </select>
-    
     <button type="submit">Generate CV</button>
 </form>
 
@@ -157,31 +83,77 @@ To fix the CV builder app to download CVs in the requested templates only, you n
         const email = document.getElementById('email').value;
         const phone = document.getElementById('phone').value;
         const linkedin = document.getElementById('linkedin').value;
-        const address = document.getElementById('address').value;
         const gender = document.getElementById('gender').value;
         const age = document.getElementById('age').value;
         const nationality = document.getElementById('nationality').value;
+        const address = document.getElementById('address').value;
         const education = document.getElementById('education').value;
         const workExperience = document.getElementById('workExperience').value;
         const additionalExperience = document.getElementById('additionalExperience').value;
-        const skills = document.getElementById('skills').value;
-        const cvFormat = document.getElementById('cvFormat').value;
+        const skillsInterests = document.getElementById('skillsInterests').value;
 
         // Save to local storage
-        const cvData = { name, email, phone, linkedin, address, gender, age, nationality, education, workExperience, additionalExperience, skills, cvFormat };
+        const cvData = { name, email, phone, linkedin, gender, age, nationality, address, education, workExperience, additionalExperience, skillsInterests };
         localStorage.setItem('cvData', JSON.stringify(cvData));
 
         // Generate CV content
-        let cvContent = '';
-        if (cvFormat === 'american') {
-            cvContent = `Name: ${name}\nAddress: ${address}\nPhone: ${phone}\nEmail: ${email}\nLinkedIn: ${linkedin}\nGender: ${gender}\nAge: ${age}\nNationality: ${nationality}\n\nEducation:\n${education}\n\nWork Experience:\n${workExperience}\n\nAdditional Experience:\n${additionalExperience}\n\nSkills and Interests:\n${skills}`;
-        } else {
-            cvContent = `Name: ${name}\nAddress: ${address}\nPhone: ${phone}\nEmail: ${email}\nLinkedIn: ${linkedin}\nGender: ${gender}\nAge: ${age}\nNationality: ${nationality}\n\nEducation:\n${education}\n\nWork Experience:\n${workExperience}\n\nAdditional Experience:\n${additionalExperience}\n\nSkills and Interests:\n${skills}`;
-        }
+        let cvContent = `
+            <h1>${name}</h1>
+            <p>Email: ${email} | Phone: ${phone}</p>
+            <p>LinkedIn: ${linkedin}</p>
+
+            <h2>Personal Data</h2>
+            <ul>
+                <li>Gender: ${gender}</li>
+                <li>Age: ${age}</li>
+                <li>Nationality: ${nationality}</li>
+                <li>Home Address: ${address}</li>
+            </ul>
+
+            <h2>Education</h2>
+            <p>${education}</p>
+
+            <h2>Work Experience</h2>
+            <p>${workExperience}</p>
+
+            <h2>Additional Experience</h2>
+            <p>${additionalExperience}</p>
+
+            <h2>Skills and Interests</h2>
+            <p>${skillsInterests}</p>
+        `;
 
         // Create a downloadable Word document
-        const blob = new Blob([cvContent], { type: 'application/msword' });
+        const blob = new Blob(['\ufeff', cvContent], { type: 'application/msword' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'CV
+        a.download = 'CV.doc';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+
+    // Load data from local storage if available
+    window.onload = function() {
+        const savedData = JSON.parse(localStorage.getItem('cvData'));
+        if (savedData) {
+            document.getElementById('name').value = savedData.name || '';
+            document.getElementById('email').value = savedData.email || '';
+            document.getElementById('phone').value = savedData.phone || '';
+            document.getElementById('linkedin').value = savedData.linkedin || '';
+            document.getElementById('gender').value = savedData.gender || '';
+            document.getElementById('age').value = savedData.age || '';
+            document.getElementById('nationality').value = savedData.nationality || '';
+            document.getElementById('address').value = savedData.address || '';
+            document.getElementById('education').value = savedData.education || '';
+            document.getElementById('workExperience').value = savedData.workExperience || '';
+            document.getElementById('additionalExperience').value = savedData.additionalExperience || '';
+            document.getElementById('skillsInterests').value = savedData.skillsInterests || '';
+        }
+    };
+</script>
+
+</body>
+</html>
