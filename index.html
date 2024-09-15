@@ -53,7 +53,7 @@ button:hover {
     color: #333;
 }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.0.1/docx.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <h1>CV Builder</h1>
@@ -79,7 +79,7 @@ button:hover {
 <button type="submit">Generate CV</button>
 </form>
 <script>
-document.getElementById('cvForm').addEventListener('submit', function(e) {
+document.getElementById('cvForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const cvData = {
@@ -97,65 +97,64 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
         skillsInterests: document.getElementById('skillsInterests').value
     };
 
-    localStorage.setItem('cvData', JSON.stringify(cvData));
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-    const { Document, Packer, Paragraph, TextRun } = docx;
+    doc.setFontSize(22);
+    doc.setTextColor('#00796b');
+    doc.text(cvData.name, 20, 20);
 
-    const doc = new Document({
-        sections: [{
-            properties: {},
-            children: [
-                new Paragraph({
-                    children: [new TextRun({ text: cvData.name, bold: true, size: 48, color: "00796b" })],
-                    alignment: docx.AlignmentType.CENTER
-                }),
-                new Paragraph({ text: `${cvData.email} | ${cvData.phone} | LinkedIn: ${cvData.linkedin}`, alignment: docx.AlignmentType.CENTER }),
-                new Paragraph({ text: "Personal Data", heading: docx.HeadingLevel.HEADING_2 }),
-                new Paragraph({ text: `Gender: ${cvData.gender}` }),
-                new Paragraph({ text: `Age: ${cvData.age}` }),
-                new Paragraph({ text: `Nationality: ${cvData.nationality}` }),
-                new Paragraph({ text: `Address: ${cvData.address}` }),
-                new Paragraph({ text: "Education", heading: docx.HeadingLevel.HEADING_2 }),
-                ...cvData.education.split('\n').map(item => new Paragraph({ text: item })),
-                new Paragraph({ text: "Work Experience", heading: docx.HeadingLevel.HEADING_2 }),
-                ...cvData.workExperience.split('\n').map(item => new Paragraph({ text: item })),
-                new Paragraph({ text: "Additional Experience", heading: docx.HeadingLevel.HEADING_2 }),
-                ...cvData.additionalExperience.split('\n').map(item => new Paragraph({ text: item })),
-                new Paragraph({ text: "Skills and Interests", heading: docx.HeadingLevel.HEADING_2 }),
-                ...cvData.skillsInterests.split('\n').map(item => new Paragraph({ text: item }))
-            ]
-        }]
-    });
+    doc.setFontSize(12);
+    doc.setTextColor('#000');
+    doc.text(`Email: ${cvData.email}`, 20, 30);
+    doc.text(`Phone: ${cvData.phone}`, 20, 40);
+    doc.text(`LinkedIn: ${cvData.linkedin}`, 20, 50);
 
-    Packer.toBlob(doc).then(blob => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'CV.docx';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    });
+    doc.setFontSize(16);
+    doc.setTextColor('#00796b');
+    doc.text('Personal Data', 20, 60);
+
+    doc.setFontSize(12);
+    doc.setTextColor('#000');
+    doc.text(`Gender: ${cvData.gender}`, 20, 70);
+    doc.text(`Age: ${cvData.age}`, 20, 80);
+    doc.text(`Nationality: ${cvData.nationality}`, 20, 90);
+    doc.text(`Address: ${cvData.address}`, 20, 100);
+
+    doc.setFontSize(16);
+    doc.setTextColor('#00796b');
+    doc.text('Education', 20, 110);
+
+    doc.setFontSize(12);
+    doc.setTextColor('#000');
+    doc.text(cvData.education, 20, 120);
+
+    doc.setFontSize(16);
+    doc.setTextColor('#00796b');
+    doc.text('Work Experience', 20, 130);
+
+    doc.setFontSize(12);
+    doc.setTextColor('#000');
+    doc.text(cvData.workExperience, 20, 140);
+
+    doc.setFontSize(16);
+    doc.setTextColor('#00796b');
+    doc.text('Additional Experience', 20, 150);
+
+    doc.setFontSize(12);
+    doc.setTextColor('#000');
+    doc.text(cvData.additionalExperience, 20, 160);
+
+    doc.setFontSize(16);
+    doc.setTextColor('#00796b');
+    doc.text('Skills and Interests', 20, 170);
+
+    doc.setFontSize(12);
+    doc.setTextColor('#000');
+    doc.text(cvData.skillsInterests, 20, 180);
+
+    doc.save('CV.pdf');
 });
-
-window.onload = function() {
-    const savedData = JSON.parse(localStorage.getItem('cvData'));
-    if (savedData) {
-        document.getElementById('name').value = savedData.name || '';
-        document.getElementById('email').value = savedData.email || '';
-        document.getElementById('phone').value = savedData.phone || '';
-        document.getElementById('linkedin').value = savedData.linkedin || '';
-        document.getElementById('gender').value = savedData.gender || '';
-        document.getElementById('age').value = savedData.age || '';
-        document.getElementById('nationality').value = savedData.nationality || '';
-        document.getElementById('address').value = savedData.address || '';
-        document.getElementById('education').value = savedData.education || '';
-        document.getElementById('workExperience').value = savedData.workExperience || '';
-        document.getElementById('additionalExperience').value = savedData.additionalExperience || '';
-        document.getElementById('skillsInterests').value = savedData.skillsInterests || '';
-    }
-};
 </script>
 <div class="message">
     <p><strong>Dear users,</strong></p>
