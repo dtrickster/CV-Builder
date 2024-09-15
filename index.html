@@ -53,6 +53,7 @@ button:hover {
     color: #333;
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.0.1/docx.min.js"></script>
 </head>
 <body>
 <h1>CV Builder</h1>
@@ -96,75 +97,46 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
         skillsInterests: document.getElementById('skillsInterests').value
     };
 
-    const cvContent = `
-    <html xmlns:o='urn:schemas-microsoft-com:office:office'
-          xmlns:w='urn:schemas-microsoft-com:office:word'
-          xmlns='http://www.w3.org/TR/REC-html40'>
-    <head>
-        <meta charset="UTF-8">
-        <style>
-            body { font-family: 'Calibri', sans-serif; }
-            h1 { color: #00796b; text-align: center; margin-top: 100px; }
-            h2 { color: #004d40; border-bottom: 1px solid black; padding-bottom: 5px; }
-            .contact-info { text-align: center; font-size: 12px; color: #555; margin-bottom: 20px; }
-            ul { margin: 0 0 10px 20px; }
-            li { margin-bottom: 5px; }
-            .section { margin-bottom: 20px; }
-            .education ul, .education li { font-weight: bold; }
-            .personal-data h2 { font-weight: bold; }
-        </style>
-    </head>
-    <body>
-        <h1>${cvData.name}</h1>
-        <div class="contact-info">
-            <p>${cvData.email} | ${cvData.phone} | LinkedIn: ${cvData.linkedin}</p>
-        </div>
-        <div class="section personal-data">
-            <h2>Personal Data</h2>
-            <ul>
-                <li>Gender: ${cvData.gender}</li>
-                <li>Age: ${cvData.age}</li>
-                <li>Nationality: ${cvData.nationality}</li>
-                <li>Address: ${cvData.address}</li>
-            </ul>
-        </div>
-        <div class="section education">
-            <h2>Education</h2>
-            <ul>
-                <li>${cvData.education.replace(/\n/g, '</li><li>')}</li>
-            </ul>
-        </div>
-        <div class="section">
-            <h2>Work Experience</h2>
-            <ul>
-                <li>${cvData.workExperience.replace(/\n/g, '</li><li>')}</li>
-            </ul>
-        </div>
-        <div class="section">
-            <h2>Additional Experience</h2>
-            <ul>
-                <li>${cvData.additionalExperience.replace(/\n/g, '</li><li>')}</li>
-            </ul>
-        </div>
-        <div class="section">
-            <h2>Skills and Interests</h2>
-            <ul>
-                <li>${cvData.skillsInterests.replace(/\n/g, '</li><li>')}</li>
-            </ul>
-        </div>
-    </body>
-    </html>
-    `;
+    localStorage.setItem('cvData', JSON.stringify(cvData));
 
-    const blob = new Blob(['\ufeff', cvContent], { type: 'application/msword' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'CV.doc';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const { Document, Packer, Paragraph, TextRun } = docx;
+
+    const doc = new Document({
+        sections: [{
+            properties: {},
+            children: [
+                new Paragraph({
+                    children: [new TextRun({ text: cvData.name, bold: true, size: 48, color: "00796b" })],
+                    alignment: docx.AlignmentType.CENTER
+                }),
+                new Paragraph({ text: `${cvData.email} | ${cvData.phone} | LinkedIn: ${cvData.linkedin}`, alignment: docx.AlignmentType.CENTER }),
+                new Paragraph({ text: "Personal Data", heading: docx.HeadingLevel.HEADING_2 }),
+                new Paragraph({ text: `Gender: ${cvData.gender}` }),
+                new Paragraph({ text: `Age: ${cvData.age}` }),
+                new Paragraph({ text: `Nationality: ${cvData.nationality}` }),
+                new Paragraph({ text: `Address: ${cvData.address}` }),
+                new Paragraph({ text: "Education", heading: docx.HeadingLevel.HEADING_2 }),
+                ...cvData.education.split('\n').map(item => new Paragraph({ text: item })),
+                new Paragraph({ text: "Work Experience", heading: docx.HeadingLevel.HEADING_2 }),
+                ...cvData.workExperience.split('\n').map(item => new Paragraph({ text: item })),
+                new Paragraph({ text: "Additional Experience", heading: docx.HeadingLevel.HEADING_2 }),
+                ...cvData.additionalExperience.split('\n').map(item => new Paragraph({ text: item })),
+                new Paragraph({ text: "Skills and Interests", heading: docx.HeadingLevel.HEADING_2 }),
+                ...cvData.skillsInterests.split('\n').map(item => new Paragraph({ text: item }))
+            ]
+        }]
+    });
+
+    Packer.toBlob(doc).then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'CV.docx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
 });
 
 window.onload = function() {
