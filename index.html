@@ -43,30 +43,10 @@ button {
 button:hover {
     background-color: #004d40;
 }
-.palette {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-.palette div {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    margin: 0 5px;
-    border: 1px solid #000;
-}
 </style>
 </head>
 <body>
 <h1>CV Builder</h1>
-<div class="palette">
-    <div style="background-color: #e0f7fa;" onclick="changeColor('#e0f7fa')"></div>
-    <div style="background-color: #ffffff;" onclick="changeColor('#ffffff')"></div>
-    <div style="background-color: #fce4ec;" onclick="changeColor('#fce4ec')"></div>
-    <div style="background-color: #ffebee;" onclick="changeColor('#ffebee')"></div>
-    <div style="background-color: #ffe0b2;" onclick="changeColor('#ffe0b2')"></div>
-    <div style="background-color: #c5cae9;" onclick="changeColor('#c5cae9')"></div>
-</div>
 <form id="cvForm">
 <h2>Personal Information</h2>
 <input type="text" id="name" placeholder="Full Name" required>
@@ -90,10 +70,6 @@ button:hover {
 </form>
 
 <script>
-function changeColor(color) {
-    document.body.style.backgroundColor = color;
-}
-
 document.getElementById('cvForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -119,18 +95,19 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
         <style>
             body { font-family: 'Calibri', sans-serif; }
             h1 { color: #00796b; text-align: center; margin-top: 100px; }
-            h2 { color: #004d40; border-bottom: 1px solid black; padding-bottom: 5px; font-weight: bold; }
+            h2 { color: #004d40; border-bottom: 1px solid black; padding-bottom: 5px; }
             .contact-info { text-align: center; font-size: 12px; color: #555; margin-bottom: 20px; }
             ul { margin: 0 0 10px 20px; }
             li { margin-bottom: 5px; }
             .section { margin-bottom: 20px; }
-            .personal-data h2, .personal-data li { font-weight: bold; } /* Bold subheading */
+            .education ul, .education li { font-weight: bold; }
+            .personal-data h2 { font-weight: bold; } /* Bold subheading */
         </style>
     </head>
     <body>
         <h1>${cvData.name}</h1>
         <div class="contact-info">
-            <p>${cvData.email} | ${cvData.phone} | LinkedIn: ${cvData.linkedin}</p>
+            <p>${cvData.email} | ${cvData.phone} | LinkedIn: ${cvData.linkedin}</p> <!-- Added "LinkedIn:" -->
         </div>
         <div class="section personal-data">
             <h2>Personal Data</h2>
@@ -198,5 +175,12 @@ window.onload = function() {
     }
 };
 </script>
+    Dear users, I hope you enjoy our product. Please be sure to save your data as soon as you are completed as we are still in the testing phase.
+
+    1. Please note that the output CV is optimized for website design and may not work on some browsers
+    2. Feel free to edit the sections in the curriculum vitae as you see fit, including emboldening text and inserting photos.
+    3. This is the British CV formatting which you can learn more about from the Oxford Careers Service (https://www.careers.ox.ac.uk/cvs#collapse1542131)
+    4. For more details on American CVs visit (https://careerservices.fas.harvard.edu/resources/bullet-point-resume-template/)
+Happy Applying!
 </body>
 </html>
