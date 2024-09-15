@@ -8,7 +8,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 50px;
+    padding: 20px;
     background-color: #e0f7fa;
 }
 h1 {
@@ -67,8 +67,6 @@ button:hover {
 <h2>Skills and Interests</h2>
 <textarea id="skillsInterests" placeholder="Skills and Interests"></textarea>
 <button type="submit">Generate CV</button>
-Dear users, I hope you enjoy our product. Please be sure to save your data as soon as you are completed as we are still in the testing phase. Please note that the output CV is optimized for website design and may not work on some browsers. Feel free to edit the sections in the curriculum vitae as you see fit, including emboldening text and inserting photos.The output is British CV formatting which you can learn more about from the Oxford Careers Service (https://www.careers.ox.ac.uk/cvs#collapse1542131).
-Happy Applying!
 </form>
 <script>
 document.getElementById('cvForm').addEventListener('submit', function(e) {
@@ -176,5 +174,12 @@ window.onload = function() {
     }
 };
 </script>
+<div class="message">
+    <p><strong>Dear users,</strong></p>
+    <p>I hope you enjoy our product!</p>
+    <p>Please be sure to save your data as soon as you are completed as we are still in the testing phase. Note that the output CV is optimized for website design and may not work on some browsers. Feel free to edit the sections in the curriculum vitae as you see fit, including emboldening text and inserting photos.</p>
+    <p>The output is in British CV formatting, which you can learn more about from the <a href="https://www.careers.ox.ac.uk/cvs#collapse1542131" target="_blank">Oxford Careers Service</a>.</p>
+    <p><strong>Happy Applying!</strong></p>
+</div>
 </body>
 </html>
