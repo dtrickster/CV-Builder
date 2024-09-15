@@ -156,11 +156,11 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
     </html>
     `;
 
-    const blob = new Blob(['\ufeff', cvContent], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const blob = new Blob(['\ufeff', cvContent], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'CV.docx';
+    a.download = 'CV.doc';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
