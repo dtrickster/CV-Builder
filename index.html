@@ -113,7 +113,7 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
 
     localStorage.setItem('cvData', JSON.stringify(cvData));
 
-    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docx;
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle } = docx;
 
     const doc = new Document({
         sections: [{
@@ -123,57 +123,199 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
                     text: cvData.name,
                     heading: HeadingLevel.HEADING_1,
                     alignment: AlignmentType.CENTER,
+                    spacing: { after: 200 },
+                    style: {
+                        paragraph: {
+                            run: {
+                                color: "00796b",
+                                size: 32,
+                                font: "Calibri",
+                            },
+                        },
+                    },
                 }),
                 new Paragraph({
-                    text: `${cvData.email} | ${cvData.phone} ${cvData.linkedin ? '| LinkedIn: ' + cvData.linkedin : ''}`,
                     alignment: AlignmentType.CENTER,
+                    spacing: { after: 200 },
+                    children: [
+                        new TextRun({
+                            text: `${cvData.email} | ${cvData.phone}${cvData.linkedin ? ' | LinkedIn: ' + cvData.linkedin : ''}`,
+                            size: 24,
+                            font: "Calibri",
+                            color: "555555",
+                        }),
+                    ],
                 }),
                 new Paragraph({
                     text: "Personal Data",
                     heading: HeadingLevel.HEADING_2,
+                    style: {
+                        paragraph: {
+                            run: {
+                                color: "004d40",
+                                size: 28,
+                                font: "Calibri",
+                            },
+                        },
+                    },
+                    border: {
+                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
+                    },
+                    spacing: { after: 200 },
                 }),
                 new Paragraph({
                     children: [
-                        new TextRun(`Gender: ${cvData.gender}`),
-                        new TextRun("\n"),
-                        new TextRun(`Age: ${cvData.age}`),
-                        new TextRun("\n"),
-                        new TextRun(`Nationality: ${cvData.nationality}`),
-                        new TextRun("\n"),
-                        new TextRun(`Address: ${cvData.address}`),
+                        new TextRun({ text: `Gender: ${cvData.gender}`, size: 24, font: "Calibri" }),
+                        new TextRun({ text: "\nAge: ", size: 24, font: "Calibri" }),
+                        new TextRun({ text: cvData.age, size: 24, font: "Calibri" }),
+                        new TextRun({ text: "\nNationality: ", size: 24, font: "Calibri" }),
+                        new TextRun({ text: cvData.nationality, size: 24, font: "Calibri" }),
+                        new TextRun({ text: "\nAddress: ", size: 24, font: "Calibri" }),
+                        new TextRun({ text: cvData.address, size: 24, font: "Calibri" }),
                     ],
+                    spacing: { after: 200 },
                 }),
                 new Paragraph({
                     text: "Education",
                     heading: HeadingLevel.HEADING_2,
+                    style: {
+                        paragraph: {
+                            run: {
+                                color: "004d40",
+                                size: 28,
+                                font: "Calibri",
+                            },
+                        },
+                    },
+                    border: {
+                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
+                    },
+                    spacing: { after: 200 },
                 }),
-                new Paragraph({
-                    text: cvData.education,
-                }),
+                ...cvData.education.split('\n').map(item => 
+                    new Paragraph({
+                        text: item,
+                        bullet: { level: 0 },
+                        style: {
+                            paragraph: {
+                                run: {
+                                    size: 24,
+                                    font: "Calibri",
+                                },
+                            },
+                        },
+                    })
+                ),
                 new Paragraph({
                     text: "Work Experience",
                     heading: HeadingLevel.HEADING_2,
+                    style: {
+                        paragraph: {
+                            run: {
+                                color: "004d40",
+                                size: 28,
+                                font: "Calibri",
+                            },
+                        },
+                    },
+                    border: {
+                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
+                    },
+                    spacing: { before: 200, after: 200 },
                 }),
-                new Paragraph({
-                    text: cvData.workExperience,
-                }),
-                new Paragraph({
-                    text: "Additional Experience",
-                    heading: HeadingLevel.HEADING_2,
-                }),
-                new Paragraph({
-                    text: cvData.additionalExperience,
-                }),
-                new Paragraph({
-                    text: "Skills and Interests",
-                    heading: HeadingLevel.HEADING_2,
-                }),
-                new Paragraph({
-                    text: cvData.skillsInterests,
-                }),
+                ...cvData.workExperience.split('\n').map(item => 
+                    new Paragraph({
+                        text: item,
+                        bullet: { level: 0 },
+                        style: {
+                            paragraph: {
+                                run: {
+                                    size: 24,
+                                    font: "Calibri",
+                                },
+                            },
+                        },
+                    })
+                ),
             ],
         }],
     });
+
+    if (cvData.additionalExperience) {
+        doc.addSection({
+            children: [
+                new Paragraph({
+                    text: "Additional Experience",
+                    heading: HeadingLevel.HEADING_2,
+                    style: {
+                        paragraph: {
+                            run: {
+                                color: "004d40",
+                                size: 28,
+                                font: "Calibri",
+                            },
+                        },
+                    },
+                    border: {
+                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
+                    },
+                    spacing: { before: 200, after: 200 },
+                }),
+                ...cvData.additionalExperience.split('\n').map(item => 
+                    new Paragraph({
+                        text: item,
+                        bullet: { level: 0 },
+                        style: {
+                            paragraph: {
+                                run: {
+                                    size: 24,
+                                    font: "Calibri",
+                                },
+                            },
+                        },
+                    })
+                ),
+            ],
+        });
+    }
+
+    if (cvData.skillsInterests) {
+        doc.addSection({
+            children: [
+                new Paragraph({
+                    text: "Skills and Interests",
+                    heading: HeadingLevel.HEADING_2,
+                    style: {
+                        paragraph: {
+                            run: {
+                                color: "004d40",
+                                size: 28,
+                                font: "Calibri",
+                            },
+                        },
+                    },
+                    border: {
+                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 10 },
+                    },
+                    spacing: { before: 200, after: 200 },
+                }),
+                ...cvData.skillsInterests.split('\n').map(item => 
+                    new Paragraph({
+                        text: item,
+                        bullet: { level: 0 },
+                        style: {
+                            paragraph: {
+                                run: {
+                                    size: 24,
+                                    font: "Calibri",
+                                },
+                            },
+                        },
+                    })
+                ),
+            ],
+        });
+    }
 
     Packer.toBlob(doc).then(blob => {
         saveAs(blob, "CV.docx");
@@ -196,7 +338,7 @@ window.onload = function() {
 <div class="message">
     <p><strong>Dear users,</strong></p>
     <p>Thank you for using our CV Builder!</p>
-    <p>Your data is automatically saved in your browser. The generated CV is now in DOCX format, which should work on all devices with Microsoft Word or compatible software installed.</p>
+    <p>Your data is automatically saved in your browser. The generated CV is in DOCX format, which should work on all devices with Microsoft Word or compatible software installed. The formatting has been carefully preserved to maintain a professional appearance.</p>
     <p>The CV follows British formatting guidelines. For more information, visit the <a href="https://www.careers.ox.ac.uk/cvs#collapse1542131" target="_blank">Oxford Careers Service</a>.</p>
     <p><strong>Good luck with your applications!</strong></p>
 </div>
