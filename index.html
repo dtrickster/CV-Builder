@@ -67,30 +67,30 @@ button:hover {
 }
 </style>
 <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
 <h1>CV Builder</h1>
 <form id="cvForm">
-<h2>Personal Information</h2>
-<input type="text" id="name" placeholder="Full Name" required>
-<input type="email" id="email" placeholder="Email" required>
-<input type="tel" id="phone" placeholder="Phone Number" required>
-<input type="url" id="linkedin" placeholder="LinkedIn Account">
-<h2>Personal Data</h2>
-<input type="text" id="gender" placeholder="Gender">
-<input type="number" id="age" placeholder="Age">
-<input type="text" id="nationality" placeholder="Nationality">
-<input type="text" id="address" placeholder="Home Address">
-<h2>Education</h2>
-<textarea id="education" placeholder="Education" required></textarea>
-<h2>Work Experience</h2>
-<textarea id="workExperience" placeholder="Work Experience" required></textarea>
-<h2>Additional Experience</h2>
-<textarea id="additionalExperience" placeholder="Additional Experience"></textarea>
-<h2>Skills and Interests</h2>
-<textarea id="skillsInterests" placeholder="Skills and Interests"></textarea>
-<button type="submit">Generate CV</button>
+    <h2>Personal Information</h2>
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="tel" id="phone" placeholder="Phone Number" required>
+    <input type="url" id="linkedin" placeholder="LinkedIn Account">
+    <h2>Personal Data</h2>
+    <input type="text" id="gender" placeholder="Gender">
+    <input type="number" id="age" placeholder="Age">
+    <input type="text" id="nationality" placeholder="Nationality">
+    <input type="text" id="address" placeholder="Home Address">
+    <h2>Education</h2>
+    <textarea id="education" placeholder="Education" required></textarea>
+    <h2>Work Experience</h2>
+    <textarea id="workExperience" placeholder="Work Experience" required></textarea>
+    <h2>Additional Experience</h2>
+    <textarea id="additionalExperience" placeholder="Additional Experience"></textarea>
+    <h2>Skills and Interests</h2>
+    <textarea id="skillsInterests" placeholder="Skills and Interests"></textarea>
+    <button type="submit">Generate CV</button>
 </form>
 <script>
 document.getElementById('cvForm').addEventListener('submit', function(e) {
@@ -110,8 +110,6 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
         additionalExperience: document.getElementById('additionalExperience').value,
         skillsInterests: document.getElementById('skillsInterests').value
     };
-
-    localStorage.setItem('cvData', JSON.stringify(cvData));
 
     const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, WidthType, TableCell, TableRow, Table } = docx;
 
