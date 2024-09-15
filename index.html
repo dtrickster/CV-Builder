@@ -1,3 +1,5 @@
+To fix the CV builder app to download CVs in the requested templates only, you need to update the CSS to include the styles for the requested templates and update the JavaScript to generate the CV content based on the selected template. Here's the updated code:
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,8 +43,63 @@
         button:hover {
             background-color: #218838;
         }
-        .hidden {
-            display: none;
+        
+        /* American CV Style */
+        .american .name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .american .address {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .american .phone {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .american .email {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .american .linkedin {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .american .section {
+            margin-bottom: 10px;
+        }
+        .american .subsection {
+            margin-left: 20px;
+        }
+        
+        /* British CV Style */
+        .british .name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .british .address {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .british .phone {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .british .email {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .british .linkedin {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .british .section {
+            margin-bottom: 10px;
+        }
+        .british .subsection {
+            margin-left: 30px;
         }
     </style>
 </head>
@@ -50,106 +107,76 @@
 
 <h1>CV Builder</h1>
 <form id="cvForm">
-    <h2>Select CV Format</h2>
-    <select id="cvType" onchange="toggleCvSections()">
+    <h2>Personal Information</h2>
+    <div class="american">
+        <div class="name">[Full Name]</div>
+        <div class="address">[Home Address]</div>
+        <div class="phone">[Phone Number]</div>
+        <div class="email">[Email]</div>
+        <div class="linkedin">[LinkedIn Account]</div>
+    </div>
+    <div class="british">
+        <div class="name">[Full Name]</div>
+        <div class="address">[Address]</div>
+        <div class="phone">[Tel:</div>
+        <div class="email">[Email:</div>
+        <div class="linkedin">[LinkedIn:](www.linkedin.com/in/[username])</div>
+    </div>
+    <h2>Personal Data</h2>
+    <input type="text" id="gender" placeholder="Gender" required>
+    <input type="text" id="age" placeholder="Age" required>
+    <input type="text" id="nationality" placeholder="Nationality" required>
+
+    <h2>Education</h2>
+    <textarea id="education" placeholder="Degree, Institution, Dates, Grade, Modules" required></textarea>
+
+    <h2>Work Experience</h2>
+    <textarea id="workExperience" placeholder="Job Title, Company, Dates, Responsibilities" required></textarea>
+
+    <h2>Additional Experience</h2>
+    <textarea id="additionalExperience" placeholder="Roles, Organizations, Dates, Responsibilities"></textarea>
+
+    <h2>Skills and Interests</h2>
+    <textarea id="skills" placeholder="Skills, Languages, Interests" required></textarea>
+
+    <h2>CV Format</h2>
+    <select id="cvFormat">
         <option value="american">American CV</option>
         <option value="british">British CV</option>
     </select>
-
-    <div id="americanCv" class="cv-section">
-        <h2>Contact Information</h2>
-        <input type="text" id="name" placeholder="Full Name" required>
-        <input type="text" id="email" placeholder="Email" required>
-        <input type="text" id="phone" placeholder="Phone Number" required>
-        <input type="text" id="linkedin" placeholder="LinkedIn Profile">
-
-        <h2>Education</h2>
-        <textarea id="education" placeholder="Degree, Major, Institution, Location, GPA, Graduation Date, Honors" required></textarea>
-
-        <h2>Experience</h2>
-        <textarea id="experience" placeholder="Job Title, Organization, Location, Dates, Responsibilities" required></textarea>
-
-        <h2>Leadership & Activities</h2>
-        <textarea id="leadership" placeholder="Role, Organization, Location, Dates, Responsibilities"></textarea>
-
-        <h2>Skills</h2>
-        <textarea id="skills" placeholder="Technical Skills, Languages" required></textarea>
-
-        <h2>Research & Publications</h2>
-        <textarea id="publications" placeholder="Titles and details of research or publications"></textarea>
-
-        <h2>Interests</h2>
-        <textarea id="interests" placeholder="Hobbies and interests"></textarea>
-    </div>
-
-    <div id="britishCv" class="cv-section hidden">
-        <h2>Contact Information</h2>
-        <input type="text" id="nameBritish" placeholder="Full Name" required>
-        <input type="text" id="emailBritish" placeholder="Email" required>
-        <input type="text" id="phoneBritish" placeholder="Phone Number" required>
-        <input type="text" id="linkedinBritish" placeholder="LinkedIn Profile">
-
-        <h2>Education</h2>
-        <textarea id="educationBritish" placeholder="Degree, Institution, Location, Graduation Date, Honors" required></textarea>
-
-        <h2>Work Experience</h2>
-        <textarea id="experienceBritish" placeholder="Job Title, Company, Location, Dates, Responsibilities" required></textarea>
-
-        <h2>Skills</h2>
-        <textarea id="skillsBritish" placeholder="Technical Skills, Languages" required></textarea>
-
-        <h2>Interests</h2>
-        <textarea id="interestsBritish" placeholder="Hobbies and interests"></textarea>
-    </div>
-
+    
     <button type="submit">Generate CV</button>
 </form>
 
 <script>
-    function toggleCvSections() {
-        const cvType = document.getElementById('cvType').value;
-        const americanCv = document.getElementById('americanCv');
-        const britishCv = document.getElementById('britishCv');
-
-        if (cvType === 'american') {
-            americanCv.classList.remove('hidden');
-            britishCv.classList.add('hidden');
-        } else {
-            americanCv.classList.add('hidden');
-            britishCv.classList.remove('hidden');
-        }
-    }
-
     document.getElementById('cvForm').addEventListener('submit', function(e) {
         e.preventDefault();
+        
+        // Get data from the form
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const linkedin = document.getElementById('linkedin').value;
+        const address = document.getElementById('address').value;
+        const gender = document.getElementById('gender').value;
+        const age = document.getElementById('age').value;
+        const nationality = document.getElementById('nationality').value;
+        const education = document.getElementById('education').value;
+        const workExperience = document.getElementById('workExperience').value;
+        const additionalExperience = document.getElementById('additionalExperience').value;
+        const skills = document.getElementById('skills').value;
+        const cvFormat = document.getElementById('cvFormat').value;
 
+        // Save to local storage
+        const cvData = { name, email, phone, linkedin, address, gender, age, nationality, education, workExperience, additionalExperience, skills, cvFormat };
+        localStorage.setItem('cvData', JSON.stringify(cvData));
+
+        // Generate CV content
         let cvContent = '';
-        const cvType = document.getElementById('cvType').value;
-
-        if (cvType === 'american') {
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const linkedin = document.getElementById('linkedin').value;
-            const education = document.getElementById('education').value;
-            const experience = document.getElementById('experience').value;
-            const leadership = document.getElementById('leadership').value;
-            const skills = document.getElementById('skills').value;
-            const publications = document.getElementById('publications').value;
-            const interests = document.getElementById('interests').value;
-
-            cvContent = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nLinkedIn: ${linkedin}\n\nEducation:\n${education}\n\nExperience:\n${experience}\n\nLeadership & Activities:\n${leadership}\n\nSkills:\n${skills}\n\nResearch & Publications:\n${publications}\n\nInterests:\n${interests}`;
+        if (cvFormat === 'american') {
+            cvContent = `Name: ${name}\nAddress: ${address}\nPhone: ${phone}\nEmail: ${email}\nLinkedIn: ${linkedin}\nGender: ${gender}\nAge: ${age}\nNationality: ${nationality}\n\nEducation:\n${education}\n\nWork Experience:\n${workExperience}\n\nAdditional Experience:\n${additionalExperience}\n\nSkills and Interests:\n${skills}`;
         } else {
-            const name = document.getElementById('nameBritish').value;
-            const email = document.getElementById('emailBritish').value;
-            const phone = document.getElementById('phoneBritish').value;
-            const linkedin = document.getElementById('linkedinBritish').value;
-            const education = document.getElementById('educationBritish').value;
-            const experience = document.getElementById('experienceBritish').value;
-            const skills = document.getElementById('skillsBritish').value;
-            const interests = document.getElementById('interestsBritish').value;
-
-            cvContent = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nLinkedIn: ${linkedin}\n\nEducation:\n${education}\n\nWork Experience:\n${experience}\n\nSkills:\n${skills}\n\nInterests:\n${interests}`;
+            cvContent = `Name: ${name}\nAddress: ${address}\nPhone: ${phone}\nEmail: ${email}\nLinkedIn: ${linkedin}\nGender: ${gender}\nAge: ${age}\nNationality: ${nationality}\n\nEducation:\n${education}\n\nWork Experience:\n${workExperience}\n\nAdditional Experience:\n${additionalExperience}\n\nSkills and Interests:\n${skills}`;
         }
 
         // Create a downloadable Word document
@@ -157,16 +184,4 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'CV.doc';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    });
-
-    // Initial call to set default CV format
-    toggleCvSections();
-</script>
-
-</body>
-</html>
+        a.download = 'CV
