@@ -66,31 +66,29 @@ button:hover {
     }
 }
 </style>
-<script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
 <h1>CV Builder</h1>
 <form id="cvForm">
-    <h2>Personal Information</h2>
-    <input type="text" id="name" placeholder="Full Name" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="tel" id="phone" placeholder="Phone Number" required>
-    <input type="url" id="linkedin" placeholder="LinkedIn Account">
-    <h2>Personal Data</h2>
-    <input type="text" id="gender" placeholder="Gender">
-    <input type="number" id="age" placeholder="Age">
-    <input type="text" id="nationality" placeholder="Nationality">
-    <input type="text" id="address" placeholder="Home Address">
-    <h2>Education</h2>
-    <textarea id="education" placeholder="Education" required></textarea>
-    <h2>Work Experience</h2>
-    <textarea id="workExperience" placeholder="Work Experience" required></textarea>
-    <h2>Additional Experience</h2>
-    <textarea id="additionalExperience" placeholder="Additional Experience"></textarea>
-    <h2>Skills and Interests</h2>
-    <textarea id="skillsInterests" placeholder="Skills and Interests"></textarea>
-    <button type="submit">Generate CV</button>
+<h2>Personal Information</h2>
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="email" id="email" placeholder="Email" required>
+<input type="tel" id="phone" placeholder="Phone Number" required>
+<input type="url" id="linkedin" placeholder="LinkedIn Account">
+<h2>Personal Data</h2>
+<input type="text" id="gender" placeholder="Gender">
+<input type="number" id="age" placeholder="Age">
+<input type="text" id="nationality" placeholder="Nationality">
+<input type="text" id="address" placeholder="Home Address">
+<h2>Education</h2>
+<textarea id="education" placeholder="Education" required></textarea>
+<h2>Work Experience</h2>
+<textarea id="workExperience" placeholder="Work Experience" required></textarea>
+<h2>Additional Experience</h2>
+<textarea id="additionalExperience" placeholder="Additional Experience"></textarea>
+<h2>Skills and Interests</h2>
+<textarea id="skillsInterests" placeholder="Skills and Interests"></textarea>
+<button type="submit">Generate CV</button>
 </form>
 <script>
 document.getElementById('cvForm').addEventListener('submit', function(e) {
@@ -111,323 +109,133 @@ document.getElementById('cvForm').addEventListener('submit', function(e) {
         skillsInterests: document.getElementById('skillsInterests').value
     };
 
-    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, WidthType, TableCell, TableRow, Table } = docx;
+    localStorage.setItem('cvData', JSON.stringify(cvData));
 
-    const doc = new Document({
-        sections: [{
-            properties: {},
-            children: [
-                new Paragraph({
-                    text: cvData.name,
-                    heading: HeadingLevel.HEADING_1,
-                    alignment: AlignmentType.CENTER,
-                    spacing: { after: 200 },
-                    style: {
-                        paragraph: {
-                            run: {
-                                color: "00796b",
-                                size: 36,
-                                bold: true,
-                                font: "Calibri",
-                            },
-                        },
-                    },
-                }),
-                new Paragraph({
-                    alignment: AlignmentType.CENTER,
-                    spacing: { after: 200 },
-                    children: [
-                        new TextRun({
-                            text: `${cvData.email} | ${cvData.phone}${cvData.linkedin ? ' | LinkedIn: ' + cvData.linkedin : ''}`,
-                            size: 24,
-                            font: "Calibri",
-                            color: "555555",
-                        }),
-                    ],
-                }),
-                new Table({
-                    width: {
-                        size: 100,
-                        type: WidthType.PERCENTAGE,
-                    },
-                    rows: [
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: [new Paragraph({
-                                        text: "Personal Data",
-                                        heading: HeadingLevel.HEADING_2,
-                                        style: {
-                                            paragraph: {
-                                                run: {
-                                                    color: "004d40",
-                                                    size: 28,
-                                                    bold: true,
-                                                    font: "Calibri",
-                                                },
-                                            },
-                                        },
-                                    })],
-                                    borders: {
-                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
-                                    },
-                                }),
-                            ],
-                        }),
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: [
-                                        new Paragraph({
-                                            children: [
-                                                new TextRun({ text: `Gender: ${cvData.gender}`, size: 24, font: "Calibri" }),
-                                                new TextRun({ text: "\nAge: ", size: 24, font: "Calibri" }),
-                                                new TextRun({ text: cvData.age, size: 24, font: "Calibri" }),
-                                                new TextRun({ text: "\nNationality: ", size: 24, font: "Calibri" }),
-                                                new TextRun({ text: cvData.nationality, size: 24, font: "Calibri" }),
-                                                new TextRun({ text: "\nAddress: ", size: 24, font: "Calibri" }),
-                                                new TextRun({ text: cvData.address, size: 24, font: "Calibri" }),
-                                            ],
-                                            spacing: { after: 200 },
-                                        }),
-                                    ],
-                                }),
-                            ],
-                        }),
-                    ],
-                }),
-                new Table({
-                    width: {
-                        size: 100,
-                        type: WidthType.PERCENTAGE,
-                    },
-                    rows: [
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: [new Paragraph({
-                                        text: "Education",
-                                        heading: HeadingLevel.HEADING_2,
-                                        style: {
-                                            paragraph: {
-                                                run: {
-                                                    color: "004d40",
-                                                    size: 28,
-                                                    bold: true,
-                                                    font: "Calibri",
-                                                },
-                                            },
-                                        },
-                                    })],
-                                    borders: {
-                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
-                                    },
-                                }),
-                            ],
-                        }),
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: cvData.education.split('\n').map(item => 
-                                        new Paragraph({
-                                            text: item,
-                                            bullet: { level: 0 },
-                                            style: {
-                                                paragraph: {
-                                                    run: {
-                                                        size: 24,
-                                                        font: "Calibri",
-                                                    },
-                                                },
-                                            },
-                                        })
-                                    ),
-                                }),
-                            ],
-                        }),
-                    ],
-                }),
-                new Table({
-                    width: {
-                        size: 100,
-                        type: WidthType.PERCENTAGE,
-                    },
-                    rows: [
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: [new Paragraph({
-                                        text: "Work Experience",
-                                        heading: HeadingLevel.HEADING_2,
-                                        style: {
-                                            paragraph: {
-                                                run: {
-                                                    color: "004d40",
-                                                    size: 28,
-                                                    bold: true,
-                                                    font: "Calibri",
-                                                },
-                                            },
-                                        },
-                                    })],
-                                    borders: {
-                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
-                                    },
-                                }),
-                            ],
-                        }),
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: cvData.workExperience.split('\n').map(item => 
-                                        new Paragraph({
-                                            text: item,
-                                            bullet: { level: 0 },
-                                            style: {
-                                                paragraph: {
-                                                    run: {
-                                                        size: 24,
-                                                        font: "Calibri",
-                                                    },
-                                                },
-                                            },
-                                        })
-                                    ),
-                                }),
-                            ],
-                        }),
-                    ],
-                }),
-            ],
-        }],
-    });
+    const cvContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${cvData.name} - CV</title>
+        <style>
+            body {
+                font-family: 'Calibri', Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            h1 {
+                color: #00796b;
+                text-align: center;
+                margin-top: 50px;
+            }
+            h2 {
+                color: #004d40;
+                border-bottom: 1px solid #004d40;
+                padding-bottom: 5px;
+            }
+            .contact-info {
+                text-align: center;
+                font-size: 14px;
+                color: #555;
+                margin-bottom: 20px;
+            }
+            ul {
+                margin: 0 0 10px 20px;
+                padding-left: 0;
+            }
+            li {
+                margin-bottom: 5px;
+            }
+            .section {
+                margin-bottom: 20px;
+            }
+            .education ul, .education li {
+                font-weight: bold;
+            }
+            @media print {
+                body {
+                    max-width: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>${cvData.name}</h1>
+        <div class="contact-info">
+            <p>${cvData.email} | ${cvData.phone} ${cvData.linkedin ? '| LinkedIn: ' + cvData.linkedin : ''}</p>
+        </div>
+        <div class="section personal-data">
+            <h2>Personal Data</h2>
+            <ul>
+                ${cvData.gender ? '<li>Gender: ' + cvData.gender + '</li>' : ''}
+                ${cvData.age ? '<li>Age: ' + cvData.age + '</li>' : ''}
+                ${cvData.nationality ? '<li>Nationality: ' + cvData.nationality + '</li>' : ''}
+                ${cvData.address ? '<li>Address: ' + cvData.address + '</li>' : ''}
+            </ul>
+        </div>
+        <div class="section education">
+            <h2>Education</h2>
+            <ul>
+                ${cvData.education.split('\n').map(item => '<li>' + item + '</li>').join('')}
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Work Experience</h2>
+            <ul>
+                ${cvData.workExperience.split('\n').map(item => '<li>' + item + '</li>').join('')}
+            </ul>
+        </div>
+        ${cvData.additionalExperience ? `
+        <div class="section">
+            <h2>Additional Experience</h2>
+            <ul>
+                ${cvData.additionalExperience.split('\n').map(item => '<li>' + item + '</li>').join('')}
+            </ul>
+        </div>
+        ` : ''}
+        ${cvData.skillsInterests ? `
+        <div class="section">
+            <h2>Skills and Interests</h2>
+            <ul>
+                ${cvData.skillsInterests.split('\n').map(item => '<li>' + item + '</li>').join('')}
+            </ul>
+        </div>
+        ` : ''}
+    </body>
+    </html>
+    `;
 
-    if (cvData.additionalExperience) {
-        doc.addSection({
-            children: [
-                new Table({
-                    width: {
-                        size: 100,
-                        type: WidthType.PERCENTAGE,
-                    },
-                    rows: [
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: [new Paragraph({
-                                        text: "Additional Experience",
-                                        heading: HeadingLevel.HEADING_2,
-                                        style: {
-                                            paragraph: {
-                                                run: {
-                                                    color: "004d40",
-                                                    size: 28,
-                                                    bold: true,
-                                                    font: "Calibri",
-                                                },
-                                            },
-                                        },
-                                    })],
-                                    borders: {
-                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
-                                    },
-                                }),
-                            ],
-                        }),
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: cvData.additionalExperience.split('\n').map(item => 
-                                        new Paragraph({
-                                            text: item,
-                                            bullet: { level: 0 },
-                                            style: {
-                                                paragraph: {
-                                                    run: {
-                                                        size: 24,
-                                                        font: "Calibri",
-                                                    },
-                                                },
-                                            },
-                                        })
-                                    ),
-                                }),
-                            ],
-                        }),
-                    ],
-                }),
-            ],
-        });
-    }
-
-    if (cvData.skillsInterests) {
-        doc.addSection({
-            children: [
-                new Table({
-                    width: {
-                        size: 100,
-                        type: WidthType.PERCENTAGE,
-                    },
-                    rows: [
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: [new Paragraph({
-                                        text: "Skills and Interests",
-                                        heading: HeadingLevel.HEADING_2,
-                                        style: {
-                                            paragraph: {
-                                                run: {
-                                                    color: "004d40",
-                                                    size: 28,
-                                                    bold: true,
-                                                    font: "Calibri",
-                                                },
-                                            },
-                                        },
-                                    })],
-                                    borders: {
-                                        bottom: { color: "004d40", style: BorderStyle.SINGLE, size: 15 },
-                                    },
-                                }),
-                            ],
-                        }),
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: cvData.skillsInterests.split('\n').map(item => 
-                                        new Paragraph({
-                                            text: item,
-                                            bullet: { level: 0 },
-                                            style: {
-                                                paragraph: {
-                                                    run: {
-                                                        size: 24,
-                                                        font: "Calibri",
-                                                    },
-                                                },
-                                            },
-                                        })
-                                    ),
-                                }),
-                            ],
-                        }),
-                    ],
-                }),
-            ],
-        });
-    }
-
-    Packer.toBlob(doc).then(blob => {
-        saveAs(blob, "CV.docx");
-        console.log("Document created successfully");
-    });
+    const blob = new Blob([cvContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'CV.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 });
+
+window.onload = function() {
+    const savedData = JSON.parse(localStorage.getItem('cvData'));
+    if (savedData) {
+        Object.keys(savedData).forEach(key => {
+            const element = document.getElementById(key);
+            if (element) {
+                element.value = savedData[key] || '';
+            }
+        });
+    }
+};
 </script>
 <div class="message">
     <p><strong>Dear users,</strong></p>
     <p>Thank you for using our CV Builder!</p>
-    <p>Your data is automatically saved in your browser. The generated CV is in DOCX format, which should work on all devices with Microsoft Word or compatible software installed. The formatting has been carefully preserved to maintain a professional appearance.</p>
+    <p>Your data is automatically saved in your browser. The generated CV is now in HTML format, which should work on browsers. You can open the HTML file in a web browser and print it or save it as a PDF for better compatibility.</p>
     <p>The CV follows British formatting guidelines. For more information, visit the <a href="https://www.careers.ox.ac.uk/cvs#collapse1542131" target="_blank">Oxford Careers Service</a>.</p>
     <p><strong>Good luck with your applications!</strong></p>
 </div>
