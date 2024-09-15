@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>CV Builder</h1>
+<form id="cvForm">
+    <h2>Select CV Format</h2>
+    <select id="cvType" onchange="toggleCvSections()">
+        <option value="american">American CV</option>
+        <option value="british">British CV</option>
+    </select>
+
+    <div id="americanCv" class="cv-section">
+        <h2>Contact Information</h2>
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="text" id="email" placeholder="Email" required>
+        <input type="text" id="phone" placeholder="Phone Number" required>
+        <input type="text" id="linkedin" placeholder="LinkedIn Profile">
+
+        <h2>Education</h2>
+        <textarea id="education" placeholder="Degree, Major, Institution, Location, GPA, Graduation Date, Honors" required></textarea>
+
+        <h2>Experience</h2>
+        <textarea id="experience" placeholder="Job Title, Organization, Location, Dates, Responsibilities" required></textarea>
+
+        <h2>Leadership & Activities</h2>
+        <textarea id="leadership" placeholder="Role, Organization, Location, Dates, Responsibilities"></textarea>
+
+        <h2>Skills</h2>
+        <textarea id="skills" placeholder="Technical Skills, Languages" required></textarea>
+
+        <h2>Research & Publications</h2>
+        <textarea id="publications" placeholder="Titles and details of research or publications"></textarea>
+
+        <h2>Interests</h2>
+        <textarea id="interests" placeholder="Hobbies and interests"></textarea>
+    </div>
+
+    <div id="britishCv" class="cv-section hidden">
+        <h2>Contact Information</h2>
+        <input type="text" id="nameBritish" placeholder="Full Name" required>
+        <input type="text" id="emailBritish" placeholder="Email" required>
+        <input type="text" id="phoneBritish" placeholder="Phone Number" required>
+        <input type="text" id="linkedinBritish" placeholder="LinkedIn Profile">
+
+        <h2>Education</h2>
+        <textarea id="educationBritish" placeholder="Degree, Institution, Location, Graduation Date, Honors" required></textarea>
+
+        <h2>Work Experience</h2>
+        <textarea id="experienceBritish" placeholder="Job Title, Company, Location, Dates, Responsibilities" required></textarea>
+
+        <h2>Skills</h2>
+        <textarea id="skillsBritish" placeholder="Technical Skills, Languages" required></textarea>
+
+        <h2>Interests</h2>
+        <textarea id="interestsBritish" placeholder="Hobbies and interests"></textarea>
+    </div>
+
+    <button type="submit">Generate CV</button>
+</form>
+
+<script>
+    function toggleCvSections() {
+        const cvType = document.getElementById('cvType').value;
+        const americanCv = document.getElementById('americanCv');
+        const britishCv = document.getElementById('britishCv');
+
+        if (cvType === 'american') {
+            americanCv.classList.remove('hidden');
+            britishCv.classList.add('hidden');
+        } else {
+            americanCv.classList.add('hidden');
+            britishCv.classList.remove('hidden');
+        }
+    }
+
+    document.getElementById('cvForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let cvContent = '';
+        const cvType = document.getElementById('cvType').value;
+
+        if (cvType === 'american') {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const linkedin = document.getElementById('linkedin').value;
+            const education = document.getElementById('education').value;
+            const experience = document.getElementById('experience').value;
+            const leadership = document.getElementById('leadership').value;
+            const skills = document.getElementById('skills').value;
+            const publications = document.getElementById('publications').value;
+            const interests = document.getElementById('interests').value;
+
+            cvContent = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nLinkedIn: ${linkedin}\n\nEducation:\n${education}\n\nExperience:\n${experience}\n\nLeadership & Activities:\n${leadership}\n\nSkills:\n${skills}\n\nResearch & Publications:\n${publications}\n\nInterests:\n${interests}`;
+        } else {
+            const name = document.getElementById('nameBritish').value;
+            const email = document.getElementById('emailBritish').value;
+            const phone = document.getElementById('phoneBritish').value;
+            const linkedin = document.getElementById('linkedinBritish').value;
+            const education = document.getElementById('educationBritish').value;
+            const experience = document.getElementById('experienceBritish').value;
+            const skills = document.getElementById('skillsBritish').value;
+            const interests = document.getElementById('interestsBritish').value;
+
+            cvContent = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nLinkedIn: ${linkedin}\n\nEducation:\n${education}\n\nWork Experience:\n${experience}\n\nSkills:\n${skills}\n\nInterests:\n${interests}`;
+        }
+
+        // Create a downloadable Word document
+        const blob = new Blob([cvContent], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'CV.doc';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+
+    // Initial call to set default CV format
+    toggleCvSections();
+</script>
+
+</body>
+</html>
