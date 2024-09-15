@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<h1>CV Builder</h1>
+<form id="cvForm">
+    <h2>Personal Information</h2>
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="text" id="email" placeholder="Email" required>
+    <input type="text" id="phone" placeholder="Phone Number" required>
+    
+    <h2>Experience</h2>
+    <textarea id="experience" placeholder="Work Experience" required></textarea>
+    
+    <h2>Education</h2>
+    <textarea id="education" placeholder="Education" required></textarea>
+    
+    <h2>Skills</h2>
+    <textarea id="skills" placeholder="Skills" required></textarea>
+    
+    <h2>CV Format</h2>
+    <select id="cvFormat">
+        <option value="american">American CV</option>
+        <option value="british">British CV</option>
+    </select>
+    
+    <button type="submit">Generate CV</button>
+</form>
+
+<script>
+    document.getElementById('cvForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get data from the form
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const experience = document.getElementById('experience').value;
+        const education = document.getElementById('education').value;
+        const skills = document.getElementById('skills').value;
+        const cvFormat = document.getElementById('cvFormat').value;
+
+        // Save to local storage
+        const cvData = { name, email, phone, experience, education, skills, cvFormat };
+        localStorage.setItem('cvData', JSON.stringify(cvData));
+        
+        // Generate CV content
+        let cvContent = '';
+        if (cvFormat === 'american') {
+            cvContent = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nExperience:\n${experience}\n\nEducation:\n${education}\n\nSkills:\n${skills}`;
+        } else {
+            cvContent = `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nEducation:\n${education}\n\nExperience:\n${experience}\n\nSkills:\n${skills}`;
+        }
+
+        // Create a downloadable Word document
+        const blob = new Blob([cvContent], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'CV.doc';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+
+    // Load data from local storage if available
+    window.onload = function() {
+        const savedData = JSON.parse(localStorage.getItem('cvData'));
+        if (savedData) {
+            document.getElementById('name').value = savedData.name || '';
+            document.getElementById('email').value = savedData.email || '';
+            document.getElementById('phone').value = savedData.phone || '';
+            document.getElementById('experience').value = savedData.experience || '';
+            document.getElementById('education').value = savedData.education || '';
+            document.getElementById('skills').value = savedData.skills || '';
+            document.getElementById('cvFormat').value = savedData.cvFormat || 'american';
+        }
+    };
+</script>
+
+</body>
+</html>
