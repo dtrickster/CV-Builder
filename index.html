@@ -1,243 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CV Builder</title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #e0f7fa;
-}
-h1 {
-    text-align: center;
-    color: #00796b;
-    margin-top: 50px;
-}
-form {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 20px auto;
-}
-input, textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-button {
-    background-color: #00796b;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-}
-button:hover {
-    background-color: #004d40;
-}
-.message {
-    margin: 20px auto;
-    padding: 15px;
-    background-color: #fff8e1;
-    border: 1px solid #ffb300;
-    border-radius: 5px;
-    text-align: center;
-    color: #333;
-    max-width: 600px;
-}
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-    h1 {
-        margin-top: 30px;
-    }
-    form, .message {
-        padding: 15px;
-    }
-}
-</style>
-</head>
-<body>
-<h1>CV Builder</h1>
-<form id="cvForm">
-<h2>Personal Information</h2>
-<input type="text" id="name" placeholder="Full Name" required>
-<input type="email" id="email" placeholder="Email" required>
-<input type="tel" id="phone" placeholder="Phone Number" required>
-<input type="url" id="linkedin" placeholder="LinkedIn Account">
-<h2>Personal Data</h2>
-<input type="text" id="gender" placeholder="Gender">
-<input type="number" id="age" placeholder="Age">
-<input type="text" id="nationality" placeholder="Nationality">
-<input type="text" id="address" placeholder="Home Address">
-<h2>Education</h2>
-<textarea id="education" placeholder="Education" required></textarea>
-<h2>Work Experience</h2>
-<textarea id="workExperience" placeholder="Work Experience" required></textarea>
-<h2>Additional Experience</h2>
-<textarea id="additionalExperience" placeholder="Additional Experience"></textarea>
-<h2>Skills and Interests</h2>
-<textarea id="skillsInterests" placeholder="Skills and Interests"></textarea>
-<button type="submit">Generate CV</button>
-</form>
-<script>
-document.getElementById('cvForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const cvData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        linkedin: document.getElementById('linkedin').value,
-        gender: document.getElementById('gender').value,
-        age: document.getElementById('age').value,
-        nationality: document.getElementById('nationality').value,
-        address: document.getElementById('address').value,
-        education: document.getElementById('education').value,
-        workExperience: document.getElementById('workExperience').value,
-        additionalExperience: document.getElementById('additionalExperience').value,
-        skillsInterests: document.getElementById('skillsInterests').value
-    };
-
-    localStorage.setItem('cvData', JSON.stringify(cvData));
-
-    const cvContent = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${cvData.name} - CV</title>
-        <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e0f7fa;
+        }
+        h1 {
+            text-align: center;
+            color: #00796b;
+            margin-top: 50px;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+        .message {
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #fff8e1;
+            border: 1px solid #ffb300;
+            border-radius: 5px;
+            text-align: center;
+            color: #333;
+            max-width: 600px;
+        }
+        @media (max-width: 768px) {
             body {
-                font-family: 'Calibri', Arial, sans-serif;
-                line-height: 1.6;
-                color: #333;
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
+                padding: 10px;
             }
             h1 {
-                color: #00796b;
-                text-align: center;
-                margin-top: 50px;
+                margin-top: 30px;
             }
-            h2 {
-                color: #004d40;
-                border-bottom: 1px solid #004d40;
-                padding-bottom: 5px;
+            form, .message {
+                padding: 15px;
             }
-            .contact-info {
-                text-align: center;
-                font-size: 14px;
-                color: #555;
-                margin-bottom: 20px;
-            }
-            ul {
-                margin: 0 0 10px 20px;
-                padding-left: 0;
-            }
-            li {
-                margin-bottom: 5px;
-            }
-            .section {
-                margin-bottom: 20px;
-            }
-            .education ul, .education li {
-                font-weight: bold;
-            }
-            @media print {
-                body {
-                    max-width: none;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <h1>${cvData.name}</h1>
-        <div class="contact-info">
-            <p>${cvData.email} | ${cvData.phone} ${cvData.linkedin ? '| LinkedIn: ' + cvData.linkedin : ''}</p>
-        </div>
-        <div class="section personal-data">
-            <h2>Personal Data</h2>
-            <ul>
-                ${cvData.gender ? '<li>Gender: ' + cvData.gender + '</li>' : ''}
-                ${cvData.age ? '<li>Age: ' + cvData.age + '</li>' : ''}
-                ${cvData.nationality ? '<li>Nationality: ' + cvData.nationality + '</li>' : ''}
-                ${cvData.address ? '<li>Address: ' + cvData.address + '</li>' : ''}
-            </ul>
-        </div>
-        <div class="section education">
-            <h2>Education</h2>
-            <ul>
-                ${cvData.education.split('\n').map(item => '<li>' + item + '</li>').join('')}
-            </ul>
-        </div>
-        <div class="section">
-            <h2>Work Experience</h2>
-            <ul>
-                ${cvData.workExperience.split('\n').map(item => '<li>' + item + '</li>').join('')}
-            </ul>
-        </div>
-        ${cvData.additionalExperience ? `
-        <div class="section">
-            <h2>Additional Experience</h2>
-            <ul>
-                ${cvData.additionalExperience.split('\n').map(item => '<li>' + item + '</li>').join('')}
-            </ul>
-        </div>
-        ` : ''}
-        ${cvData.skillsInterests ? `
-        <div class="section">
-            <h2>Skills and Interests</h2>
-            <ul>
-                ${cvData.skillsInterests.split('\n').map(item => '<li>' + item + '</li>').join('')}
-            </ul>
-        </div>
-        ` : ''}
-    </body>
-    </html>
-    `;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.1.0/docx.min.js"></script>
+</head>
+<body>
+    <h1>CV Builder</h1>
+    <form id="cvForm">
+        <h2>Personal Information</h2>
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
+        <input type="url" id="linkedin" placeholder="LinkedIn Account">
+        <h2>Personal Data</h2>
+        <input type="text" id="gender" placeholder="Gender">
+        <input type="number" id="age" placeholder="Age">
+        <input type="text" id="nationality" placeholder="Nationality">
+        <input type="text" id="address" placeholder="Home Address">
+        <h2>Education</h2>
+        <textarea id="education" placeholder="Education" required></textarea>
+        <h2>Work Experience</h2>
+        <textarea id="workExperience" placeholder="Work Experience" required></textarea>
+        <h2>Additional Experience</h2>
+        <textarea id="additionalExperience" placeholder="Additional Experience"></textarea>
+        <h2>Skills and Interests</h2>
+        <textarea id="skillsInterests" placeholder="Skills and Interests"></textarea>
+        <button type="submit">Generate CV</button>
+    </form>
 
-    const blob = new Blob([cvContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'CV.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-});
+    <script>
+        document.getElementById('cvForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const { Document, Packer, Paragraph, TextRun, HeadingLevel } = window.docx;
 
-window.onload = function() {
-    const savedData = JSON.parse(localStorage.getItem('cvData'));
-    if (savedData) {
-        Object.keys(savedData).forEach(key => {
-            const element = document.getElementById(key);
-            if (element) {
-                element.value = savedData[key] || '';
-            }
+            const cvData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                linkedin: document.getElementById('linkedin').value,
+                gender: document.getElementById('gender').value,
+                age: document.getElementById('age').value,
+                nationality: document.getElementById('nationality').value,
+                address: document.getElementById('address').value,
+                education: document.getElementById('education').value,
+                workExperience: document.getElementById('workExperience').value,
+                additionalExperience: document.getElementById('additionalExperience').value,
+                skillsInterests: document.getElementById('skillsInterests').value
+            };
+
+            const doc = new Document({
+                sections: [{
+                    properties: {},
+                    children: [
+                        new Paragraph({
+                            text: cvData.name,
+                            heading: HeadingLevel.HEADING_1,
+                            bold: true,
+                        }),
+                        new Paragraph({
+                            text: `${cvData.email} | ${cvData.phone} ${cvData.linkedin ? '| LinkedIn: ' + cvData.linkedin : ''}`,
+                            spacing: { after: 200 },
+                        }),
+                        new Paragraph({
+                            text: "Personal Data",
+                            heading: HeadingLevel.HEADING_2
+                        }),
+                        new Paragraph(`Gender: ${cvData.gender || 'N/A'}`),
+                        new Paragraph(`Age: ${cvData.age || 'N/A'}`),
+                        new Paragraph(`Nationality: ${cvData.nationality || 'N/A'}`),
+                        new Paragraph(`Address: ${cvData.address || 'N/A'}`),
+                        new Paragraph({
+                            text: "Education",
+                            heading: HeadingLevel.HEADING_2
+                        }),
+                        ...cvData.education.split('\n').map(item => new Paragraph(item)),
+                        new Paragraph({
+                            text: "Work Experience",
+                            heading: HeadingLevel.HEADING_2
+                        }),
+                        ...cvData.workExperience.split('\n').map(item => new Paragraph(item)),
+                        ...(cvData.additionalExperience ? [
+                            new Paragraph({
+                                text: "Additional Experience",
+                                heading: HeadingLevel.HEADING_2
+                            }),
+                            ...cvData.additionalExperience.split('\n').map(item => new Paragraph(item))
+                        ] : []),
+                        ...(cvData.skillsInterests ? [
+                            new Paragraph({
+                                text: "Skills and Interests",
+                                heading: HeadingLevel.HEADING_2
+                            }),
+                            ...cvData.skillsInterests.split('\n').map(item => new Paragraph(item))
+                        ] : []),
+                    ],
+                }],
+            });
+
+            Packer.toBlob(doc).then(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${cvData.name.replace(/\s+/g, '_')}_CV.docx`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
         });
-    }
-};
-</script>
-<div class="message">
-    <p><strong>Dear users,</strong></p>
-    <p>Thank you for using our CV Builder!</p>
-    <p>Your data is automatically saved in your browser. The generated CV is In HTML format You can open the HTML file in a web browser and print it or save it as a PDF for better compatibility.</p>
-    <p>The CV builder follows British CV format. For information about curriculum vitae writing and tips, check <a href="https://www.careers.ox.ac.uk/cvs#collapse1542131" target="_blank">Oxford Careers Service</a>.</p>
-    <p><strong>Good luck with your applications!</strong></p>
-</div>
+
+        window.onload = function() {
+            const savedData = JSON.parse(localStorage.getItem('cvData'));
+            if (savedData) {
+                Object.keys(savedData).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = savedData[key] || '';
+                    }
+                });
+            }
+        };
+    </script>
+
+    <div class="message">
+        <p><strong>Dear users,</strong></p>
+        <p>Thank you for using our CV Builder!</p>
+        <p>Your data is automatically saved in your browser. The generated CV is in DOCX format, ready for download.</p>
+        <p>The CV builder follows British CV format. For information about curriculum vitae writing and tips, check <a href="https://www.careers.ox.ac.uk/cvs#collapse1542131" target="_blank">Oxford Careers Service</a>.</p>
+        <p><strong>Good luck with your applications!</strong></p>
+    </div>
 </body>
 </html>
