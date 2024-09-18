@@ -95,7 +95,7 @@
     <script>
         document.getElementById('cvForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const { Document, Packer, Paragraph, TextRun, HeadingLevel } = window.docx;
 
             const cvData = {
@@ -121,10 +121,11 @@
                             text: cvData.name,
                             heading: HeadingLevel.HEADING_1,
                             bold: true,
+                            alignment: "center",
                         }),
                         new Paragraph({
                             text: `${cvData.email} | ${cvData.phone} ${cvData.linkedin ? '| LinkedIn: ' + cvData.linkedin : ''}`,
-                            spacing: { after: 200 },
+                            alignment: "center",
                         }),
                         new Paragraph({
                             text: "Personal Data",
@@ -173,18 +174,6 @@
                 URL.revokeObjectURL(url);
             });
         });
-
-        window.onload = function() {
-            const savedData = JSON.parse(localStorage.getItem('cvData'));
-            if (savedData) {
-                Object.keys(savedData).forEach(key => {
-                    const element = document.getElementById(key);
-                    if (element) {
-                        element.value = savedData[key] || '';
-                    }
-                });
-            }
-        };
     </script>
 
     <div class="message">
